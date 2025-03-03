@@ -1,0 +1,41 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./server  # Path to the backend (JSON server) Dockerfile
+    ports:
+      - "9000:9000"
+    volumes:
+      - ./server:/app  # Mount the local server directory to the container
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: .  # Path to the frontend Dockerfile (assuming it's in the root)
+    ports:
+      - "3000:80"  # Adjust if your frontend runs on a different port
+    volumes:
+      - ./src:/app/src  # Live-reloading support
+      - /app/node_modules  # Avoid mounting node_modules from host
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+
+# how to run :
+  # sudo apt update
+  # sudo apt install docker-compose -y
+  # or 
+
+  #sudo apt remove docker-compose -y
+  #sudo apt autoremove -y
+  # sudo curl -L "https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+  # sudo chmod +x /usr/local/bin/docker-compose
+  # sudo ln -s /usr/local/bin/docker-compose /usr/bin/docker-compose
+  # docker-compose version
+
+
+
+  # docker-compose up --build
+
